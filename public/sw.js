@@ -5,7 +5,7 @@ const STATIC = `static-${VERSION}`;
 const PAGES = `pages-${VERSION}`;
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(PAGES).then((c) => c.addAll(["/login", "/offline.html"])).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(PAGES).then((c) => c.addAll(["/offline.html"])).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (e) => {
@@ -43,6 +43,8 @@ self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== location.origin || url.pathname.startsWith("/api/")) return;
+  // never serve the login page from cache: an old copy would post to a newer server and fail
+  if (url.pathname === "/login" || url.pathname === "/") return;
 
   if (url.pathname.startsWith("/_next/static/") || /\.(png|svg|ico|woff2?|json)$/.test(url.pathname)) {
     e.respondWith(cacheFirst(req));
