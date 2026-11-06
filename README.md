@@ -37,15 +37,20 @@ Design mockup (HTML) gulo [`docs/design/`](docs/design) folder e ache.
 
 ## Chalanor niyom
 
-Lagbe: **Node.js 20+**
+Lagbe: **Node.js 20+** ar ekta **Supabase** project (free plan e chole).
 
 ```bash
 npm install
-cp .env.example .env        # tarpor .env e SESSION_SECRET bodlan
-npm run db:setup            # database + demo data
+npm run setup:supabase      # Supabase er 2 ta connection line + DB password chabe, .env banabe, table + demo data dibe
 npm run build
 npm run start               # http://localhost:3000
 ```
+
+Haate korte chaile: `.env.example` ke `.env` e copy kore Supabase → **Connect → ORMs → Prisma** theke `DATABASE_URL` ar `DIRECT_URL` boshan
+(password e `%` `#` `?` `@` thakle URL-encode korte hobe), tarpor `npm run db:setup`.
+
+**Supabase nirapotta:** `npm run db:setup` sob table e Row Level Security (RLS) chalu kore — Supabase er public Data API (anon key)
+diye kono data pora/lekha jabe na; app shudhu nijer server theke Prisma diye database e jay. Notun table add korle `npm run db:secure` abar chalan.
 
 Development: `npm run dev` (offline / service worker shudhu production build e chole).
 
@@ -64,12 +69,12 @@ Student/teacher er default password = mobile number er shesh 6 digit.
 ## Real coaching e use korte
 1. `.env` e lomba random `SESSION_SECRET` din (production e na dile app chalu hobe na).
 2. `.env` e coaching er naam, phone, WhatsApp, address din (guardian ra dekhe).
-3. Beshi user hole `prisma/schema.prisma` e `provider = "postgresql"` kore `DATABASE_URL` PostgreSQL er din.
+3. Vercel (serverless) e deploy korle `DATABASE_URL` e `connection_limit=1` din; nijer server e `10` thik ache.
 4. HTTPS e host korun (offline/PWA er jonno dorkar).
 5. Demo data chara shuru korte `npx prisma db push` chalan, tarpor seed file theke shudhu admin user rekhe baki muche din.
 
 ## Tech
-Next.js 15 (App Router) · TypeScript · Prisma (SQLite / PostgreSQL) · Tailwind CSS v4 · custom SVG charts · Dexie (IndexedDB) · custom service worker · `next/font` (self-hosted Plus Jakarta Sans + Hind Siliguri)
+Next.js 15 (App Router) · TypeScript · Prisma + Supabase Postgres · Tailwind CSS v4 · custom SVG charts · Dexie (IndexedDB) · custom service worker · `next/font` (self-hosted Plus Jakarta Sans + Hind Siliguri)
 
 ## Folder
 ```

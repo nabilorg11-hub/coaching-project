@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:setup": "prisma db push && prisma db seed",
-    "postinstall": "prisma generate"
+    "db:setup": "prisma db push && npm run db:secure && prisma db seed",
+    "postinstall": "prisma generate",
+    "db:secure": "prisma db execute --file prisma/supabase-rls.sql --schema prisma/schema.prisma",
+    "setup:supabase": "node scripts/setup-supabase.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

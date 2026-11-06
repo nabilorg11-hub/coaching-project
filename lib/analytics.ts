@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { prisma } from "./prisma";
 
 export const pct = (a: number, b: number) => (b ? Math.round((a / b) * 1000) / 10 : 0);
@@ -11,19 +12,26 @@ export type StudentRow = {
   subjects: { name: string; pct: number }[]; weak: string[]; risks: string[];
 };
 
-/** Full performance picture for every student in the given batches. */
-export async function studentRows(batchIds?: string[]): Promise<StudentRow[]> {
+/** Full performance picture for every student in the given batches (computed once per request). */
+export function studentRows(batchIds?: string[]): Promise<StudentRow[]> {
+  return cachedRows(batchIds ? "b:" + [...batchIds].sort().join(",") : "all");
+}
+
+const cachedRows = cache(async (key: string): Promise<StudentRow[]> => {
+  const batchIds = key === "all" ? undefined : key.slice(2).split(",").filter(Boolean);
   const where = batchIds ? { batchId: { in: batchIds } } : {};
-  const students = await prisma.student.findMany({
+  const [students, exams] = await Promise.all([
+    prisma.student.findMany({
     where: { ...where, status: "ACTIVE" },
     include: { user: true, batch: true, attendance: { include: { session: true } } },
     orderBy: { rollNo: "asc" },
-  });
-  const exams = await prisma.exam.findMany({
+  }),
+    prisma.exam.findMany({
     where: batchIds ? { batchId: { in: batchIds } } : {},
     include: { subjects: { include: { subject: true, marks: true } } },
     orderBy: { date: "asc" },
-  });
+  }),
+  ]);
 
   // per exam totals for every student -> ranks
   const examTotals = new Map<string, Map<string, number>>();
@@ -74,7 +82,7 @@ export async function studentRows(batchIds?: string[]): Promise<StudentRow[]> {
       attPct, classes: recs.length, absentStreak, avgPct, lastPct: results.at(-1)?.pct ?? null, trend, exams: results, subjects, weak, risks,
     };
   });
-}
+});
 
 export async function studentDetail(studentId: string) {
   const st = await prisma.student.findUnique({ where: { id: studentId }, include: { user: true, batch: { include: { course: true } }, guardian: true } });

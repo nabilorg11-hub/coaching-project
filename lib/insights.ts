@@ -41,12 +41,17 @@ export async function studentDashboard(studentId: string) {
     include: { user: true, guardian: true, batch: { include: { course: true, _count: { select: { students: { where: { status: "ACTIVE" } } } } } } },
   });
   if (!st) return null;
-  const rows = await studentRows([st.batchId]);
-  const row = rows.find((r) => r.id === studentId) as StudentRow | undefined;
   const t = today();
-
-  const records = (await prisma.attendanceRecord.findMany({ where: { studentId }, include: { session: true } }))
-    .map((a) => ({ date: a.session.date, status: a.status }));
+  // independent queries run together (each Supabase round trip is slow)
+  const [rows, rawRecords, upcoming, notices, comments] = await Promise.all([
+    studentRows([st.batchId]),
+    prisma.attendanceRecord.findMany({ where: { studentId }, include: { session: true } }),
+    prisma.exam.findMany({ where: { batchId: st.batchId, date: { gte: t } }, include: { subjects: true }, orderBy: { date: "asc" }, take: 4 }),
+    prisma.notice.findMany({ where: { OR: [{ batchId: null }, { batchId: st.batchId }] }, include: { author: true }, orderBy: { createdAt: "desc" }, take: 5 }),
+    prisma.comment.findMany({ where: { studentId }, include: { author: { include: { subject: true } } }, orderBy: { createdAt: "desc" }, take: 5 }),
+  ]);
+  const row = rows.find((r) => r.id === studentId) as StudentRow | undefined;
+  const records = rawRecords.map((a) => ({ date: a.session.date, status: a.status }));
   const att4 = attWindow(records, addDays(t, -28), t);
   const attPrev = attWindow(records, addDays(t, -56), addDays(t, -29));
   const recent = records.filter((r) => r.date >= addDays(t, -28));
@@ -60,9 +65,6 @@ export async function studentDashboard(studentId: string) {
 
   const exams = row?.exams ?? [];
   const last = exams.at(-1), prev = exams.at(-2);
-  const upcoming = await prisma.exam.findMany({ where: { batchId: st.batchId, date: { gte: t } }, include: { subjects: true }, orderBy: { date: "asc" }, take: 4 });
-  const notices = await prisma.notice.findMany({ where: { OR: [{ batchId: null }, { batchId: st.batchId }] }, include: { author: true }, orderBy: { createdAt: "desc" }, take: 5 });
-  const comments = await prisma.comment.findMany({ where: { studentId }, include: { author: { include: { subject: true } } }, orderBy: { createdAt: "desc" }, take: 5 });
 
   const weakest = row?.subjects[0];
   return {
@@ -95,14 +97,19 @@ export async function teacherDashboard(teacherId: string, batchId?: string) {
   if (!batch) return { teacher, batches, batch: null, subject };
 
   const t = today();
-  const students = await prisma.student.findMany({
-    where: { batchId: batch.id, status: "ACTIVE" }, include: { user: true, attendance: { include: { session: true } } }, orderBy: { rollNo: "asc" },
-  });
-  const exams = await prisma.exam.findMany({
-    where: { batchId: batch.id, date: { lte: t } },
-    include: { subjects: { where: subject ? { subjectId: subject.id } : undefined, include: { marks: true } } },
-    orderBy: { date: "asc" },
-  });
+  const [students, exams, todaySession, nextExam, allStudents] = await Promise.all([
+    prisma.student.findMany({
+      where: { batchId: batch.id, status: "ACTIVE" }, include: { user: true, attendance: { include: { session: true } } }, orderBy: { rollNo: "asc" },
+    }),
+    prisma.exam.findMany({
+      where: { batchId: batch.id, date: { lte: t } },
+      include: { subjects: { where: subject ? { subjectId: subject.id } : undefined, include: { marks: true } } },
+      orderBy: { date: "asc" },
+    }),
+    prisma.attendanceSession.findUnique({ where: { batchId_date: { batchId: batch.id, date: t } } }),
+    prisma.exam.findFirst({ where: { batchId: batch.id, date: { gt: t } }, orderBy: { date: "asc" } }),
+    prisma.student.count({ where: { status: "ACTIVE", batchId: { in: batches.map((b) => b.id) } } }),
+  ]);
   const subjExams = exams.filter((e) => e.subjects.length);
 
   const rows = students.map((s) => {
@@ -139,14 +146,12 @@ export async function teacherDashboard(teacherId: string, batchId?: string) {
   const pending = subjExams
     .map((e) => ({ exam: e, missing: students.length - e.subjects[0].marks.length }))
     .filter((x) => x.missing > 0);
-  const todaySession = await prisma.attendanceSession.findUnique({ where: { batchId_date: { batchId: batch.id, date: t } } });
-  const nextExam = await prisma.exam.findFirst({ where: { batchId: batch.id, date: { gt: t } }, orderBy: { date: "asc" } });
 
   return {
     teacher, batches, batch, subject, rows, latest, bins, pending, todayTaken: !!todaySession, nextExam,
     subjectAvg: examAvg(latest), subjectDelta: examAvg(latest) !== null && examAvg(prevExam) !== null ? Math.round((examAvg(latest)! - examAvg(prevExam)!) * 10) / 10 : null,
     examTrend: subjExams.map((e) => ({ label: shortExam(e.title), value: examAvg(e) })),
-    allStudents: await prisma.student.count({ where: { status: "ACTIVE", batchId: { in: batches.map((b) => b.id) } } }),
+    allStudents,
   };
 }
 
@@ -154,19 +159,24 @@ export async function teacherDashboard(teacherId: string, batchId?: string) {
 
 export async function adminDashboard() {
   const t = today();
-  const rows = await studentRows();
-  const batches = await prisma.batch.findMany({ include: { course: true, teachers: { include: { teacher: true } } }, orderBy: { name: "asc" } });
-
   const monthStart = addDays(t, -30);
-  const newThisMonth = await prisma.student.count({ where: { admissionDate: { gte: new Date(monthStart) } } });
+  // all independent reads in one go (each Supabase round trip is slow)
+  const [rows, batches, newThisMonth, todaySessions, allSessions, allExams, teachers, exams, recentAdmissions] = await Promise.all([
+    studentRows(),
+    prisma.batch.findMany({ include: { course: true, teachers: { include: { teacher: true } } }, orderBy: { name: "asc" } }),
+    prisma.student.count({ where: { admissionDate: { gte: new Date(monthStart) } } }),
+    prisma.attendanceSession.findMany({ where: { date: t }, include: { records: true } }),
+    prisma.attendanceSession.findMany({ where: { date: { gte: addDays(t, -56) } }, include: { records: true } }),
+    prisma.exam.findMany({ where: { date: { gte: addDays(t, -56), lte: t } }, include: { subjects: { include: { marks: true } } } }),
+    prisma.user.findMany({ where: { role: "TEACHER" }, include: { subject: true, teaches: true }, orderBy: { name: "asc" } }),
+    prisma.exam.findMany({ where: { date: { lte: t } }, include: { subjects: { include: { _count: { select: { marks: true } } } } } }),
+    prisma.student.findMany({ include: { user: true, batch: true }, orderBy: { admissionDate: "desc" }, take: 5 }),
+  ]);
 
-  const todaySessions = await prisma.attendanceSession.findMany({ where: { date: t }, include: { records: true } });
   const todayRecs = todaySessions.flatMap((s) => s.records);
   const todayPct = todayRecs.length ? pct(todayRecs.filter((r) => r.status !== "ABSENT").length, todayRecs.length) : null;
 
   // 8 weekly buckets: attendance % and average result %
-  const allSessions = await prisma.attendanceSession.findMany({ where: { date: { gte: addDays(t, -56) } }, include: { records: true } });
-  const allExams = await prisma.exam.findMany({ where: { date: { gte: addDays(t, -56), lte: t } }, include: { subjects: { include: { marks: true } } } });
   const weeks = Array.from({ length: 8 }, (_, i) => {
     const from = addDays(t, -56 + i * 7), to = addDays(t, -50 + i * 7);
     const recs = allSessions.filter((s) => s.date >= from && s.date <= to).flatMap((s) => s.records);
@@ -190,8 +200,6 @@ export async function adminDashboard() {
     };
   });
 
-  const teachers = await prisma.user.findMany({ where: { role: "TEACHER" }, include: { subject: true, teaches: true }, orderBy: { name: "asc" } });
-  const exams = await prisma.exam.findMany({ where: { date: { lte: t } }, include: { subjects: { include: { _count: { select: { marks: true } } } } } });
   const teacherStatus = teachers.map((tch) => {
     const ids = tch.teaches.map((x) => x.batchId);
     const takenToday = todaySessions.filter((s) => s.takenById === tch.id).length;
@@ -203,7 +211,6 @@ export async function adminDashboard() {
     return { id: tch.id, name: tch.name, subject: tch.subject ? subjectLabel(tch.subject.name) : "—", batches: ids.length, takenToday, marksMissing };
   });
 
-  const recentAdmissions = await prisma.student.findMany({ include: { user: true, batch: true }, orderBy: { admissionDate: "desc" }, take: 5 });
 
   return {
     rows, total: rows.length, newThisMonth, todayPct, todayCount: todayRecs.length, todayPresent: todayRecs.filter((r) => r.status !== "ABSENT").length,
