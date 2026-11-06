@@ -43,6 +43,9 @@ export async function GET() {
           sock.on("error", (err) => res(`error ${(err as NodeJS.ErrnoException).code}`));
         });
         network = `dns: ${addrs.map((a) => `IPv${a.family}`).join(",")} · tcp ${host[2]}: ${tcp} · region: ${process.env.VERCEL_REGION ?? "?"}`;
+        // shape of the URL only (user prefix, lengths, param names) — never the password itself
+        const u = new URL(fixDbUrl(process.env.DATABASE_URL)!);
+        network += ` · url: user=${u.username.split(".")[0]}.(${u.username.split(".")[1]?.length ?? 0} chars) pwLen=${decodeURIComponent(u.password).length} db=${u.pathname} params=${[...u.searchParams.keys()].join("+")}`;
       }
     } catch (e) {
       network = `probe failed: ${(e as NodeJS.ErrnoException).code ?? (e as Error).message}`;
