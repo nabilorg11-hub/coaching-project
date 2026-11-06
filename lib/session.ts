@@ -7,8 +7,9 @@ export type Session = { userId: string; name: string; role: Role; studentId?: st
 
 export const SESSION_COOKIE = "cm_session";
 const secret = () => {
-  const s = process.env.SESSION_SECRET;
-  if (!s && process.env.NODE_ENV === "production") throw new Error("SESSION_SECRET is not set — copy .env.example to .env");
+  // SESSION_SECRET is preferred; without it the (equally secret) database URL is used as the signing key
+  const s = process.env.SESSION_SECRET?.trim() || (process.env.DATABASE_URL ? `db:${process.env.DATABASE_URL.trim()}` : "");
+  if (!s && process.env.NODE_ENV === "production") throw new Error("Set SESSION_SECRET (or DATABASE_URL) — see .env.example");
   return new TextEncoder().encode(s || "dev-secret-change-me");
 };
 

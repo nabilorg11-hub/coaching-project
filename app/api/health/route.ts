@@ -26,6 +26,6 @@ export async function GET() {
       : /does not exist|P2021/.test(msg) ? "tables missing — run npm run db:setup"
       : "error";
   }
-  const ok = env.DATABASE_URL && env.SESSION_SECRET && database.startsWith("ok");
+  const ok = env.DATABASE_URL && database.startsWith("ok"); // SESSION_SECRET optional (falls back to the DB URL)
   return NextResponse.json({ ok, env, database, detail }, { status: ok ? 200 : 500, headers: { "Cache-Control": "no-store" } });
 }
