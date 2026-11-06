@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design System — Shikhon Coaching</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root { --ink:#0b1020; --text:#0f172a; --muted:#64748b; --line:#e6e8f0; --bg:#f6f7fb;
+    --student:#5b4cf0; --guardian:#0e9f8e; --teacher:#e07a12; --admin:#1f2a5a;
+    --ok:#10b981; --warn:#f59e0b; --bad:#ef4444; --info:#3b82f6;
+    --font:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif; --bn:"Hind Siliguri","Plus Jakarta Sans",sans-serif; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:var(--font); color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased; }
+  .bn { font-family: var(--bn); }
+  .page { max-width: 1360px; margin: 0 auto; padding: 40px 40px 56px; }
+  header { display:flex; align-items:end; justify-content:space-between; margin-bottom:28px; }
+  header h1 { margin:0; font-size:30px; letter-spacing:-.03em; }
+  header p { margin:6px 0 0; color:var(--muted); }
+  .tag { font-size:12px; font-weight:700; padding:6px 12px; border-radius:999px; background:#fff; border:1px solid var(--line); }
+  .grid { display:grid; grid-template-columns: repeat(12, 1fr); gap:20px; }
+  .card { background:#fff; border:1px solid #eceef4; border-radius:20px; padding:22px; box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.04); }
+  .card h3 { margin:0 0 16px; font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:#94a3b8; font-weight:700; }
+  .c4{grid-column:span 4} .c5{grid-column:span 5} .c7{grid-column:span 7} .c8{grid-column:span 8} .c3{grid-column:span 3} .c6{grid-column:span 6} .c12{grid-column:span 12}
+
+  .sw { display:grid; grid-template-columns: repeat(4,1fr); gap:10px; }
+  .chip { border-radius:14px; height:78px; padding:10px; color:#fff; display:flex; flex-direction:column; justify-content:flex-end; font-size:12px; font-weight:700; }
+  .chip small { font-weight:500; opacity:.8; }
+  .sw2 { display:grid; grid-template-columns: repeat(4,1fr); gap:10px; margin-top:10px; }
+  .chip.l { color:var(--text); border:1px solid var(--line); }
+
+  .type div { display:flex; align-items:baseline; justify-content:space-between; gap:16px; padding:8px 0; border-bottom:1px dashed #eef0f5; }
+  .type div:last-child { border:0; }
+  .type small { color:#94a3b8; font-size:12px; white-space:nowrap; }
+
+  .btns { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .b { height:44px; padding:0 18px; border-radius:12px; border:0; font:700 14px var(--font); display:inline-flex; align-items:center; gap:8px; }
+  .b.p { color:#fff; background:linear-gradient(135deg,#5b4cf0,#8b5cf6); box-shadow:0 8px 20px rgba(91,76,240,.3), inset 0 1px 0 rgba(255,255,255,.25); }
+  .b.s { background:#fff; border:1.5px solid var(--line); color:var(--text); }
+  .b.g { background:#efedff; color:#5b4cf0; }
+  .b.d { background:#fef2f2; color:#dc2626; }
+  .b.sm { height:34px; padding:0 12px; font-size:13px; border-radius:10px; }
+
+  .badges { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+  .bd { font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; display:inline-flex; gap:6px; align-items:center; }
+  .bd i { width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+  .inp { height:48px; border-radius:14px; border:1.5px solid var(--line); display:flex; align-items:center; padding:0 14px; gap:10px; color:#94a3b8; font-size:14.5px; margin-bottom:10px; background:#fff; }
+  .inp.f { border-color:#5b4cf0; box-shadow:0 0 0 4px rgba(91,76,240,.12); color:var(--text); }
+  .inp.e { border-color:#ef4444; box-shadow:0 0 0 4px rgba(239,68,68,.10); color:var(--text); }
+  .err { color:#dc2626; font-size:12.5px; margin:-4px 0 10px 4px; }
+
+  .stat { border-radius:18px; padding:18px; border:1px solid #eceef4; background:#fff; }
+  .stat .lbl { color:var(--muted); font-size:13px; display:flex; justify-content:space-between; align-items:center; }
+  .ico { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; }
+  .stat .val { font-size:30px; font-weight:800; letter-spacing:-.03em; margin-top:6px; }
+  .delta { font-size:12px; font-weight:700; }
+
+  .ring { display:flex; align-items:center; gap:18px; }
+  .subj { margin-top:4px; }
+  .subj div { display:grid; grid-template-columns: 110px 1fr 48px; align-items:center; gap:12px; margin:11px 0; font-size:13.5px; font-weight:600; }
+  .bar { height:9px; border-radius:99px; background:#f1f3f8; overflow:hidden; }
+  .bar span { display:block; height:100%; border-radius:99px; }
+
+  .roles { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .rc { border-radius:16px; padding:16px; color:#fff; min-height:150px; display:flex; flex-direction:column; gap:6px; position:relative; overflow:hidden; }
+  .rc b { font-size:16px; }
+  .rc p { margin:0; font-size:13px; line-height:1.55; opacity:.9; }
+  .rc::after { content:""; position:absolute; right:-30px; bottom:-30px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,.12); }
+
+  .student-row { display:flex; align-items:center; gap:12px; padding:12px; border-radius:14px; border:1px solid #eef0f5; margin-bottom:8px; }
+  .av { width:38px; height:38px; border-radius:50%; display:grid; place-items:center; color:#fff; font-weight:800; font-size:13px; }
+  .nm { font-weight:700; font-size:14px; } .nm small { display:block; font-weight:500; color:var(--muted); font-size:12px; }
+  .student-row .end { margin-left:auto; display:flex; gap:8px; align-items:center; }
+
+  .motion { display:flex; gap:12px; flex-wrap:wrap; }
+  .mo { flex:1; min-width:150px; border:1px dashed #d9dcea; border-radius:14px; padding:12px; font-size:12.5px; color:var(--muted); }
+  .mo b { display:block; color:var(--text); font-size:13.5px; margin-bottom:2px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div>
+      <h1>Design System</h1>
+      <p class="bn">পুরো অ্যাপ এই রং, ফন্ট আর কম্পোনেন্ট দিয়ে বানানো হবে — যেন সব স্ক্রিন একই রকম প্রিমিয়াম লাগে।</p>
+    </div>
+    <span class="tag">v1 · Draft for approval</span>
+  </header>
+
+  <div class="grid">
+    <!-- Colors -->
+    <div class="card c5">
+      <h3>Color · Role accents</h3>
+      <div class="sw">
+        <div class="chip" style="background:linear-gradient(135deg,#5b4cf0,#8b5cf6)">Student<small>#5B4CF0</small></div>
+        <div class="chip" style="background:linear-gradient(135deg,#0e9f8e,#14b8a6)">Guardian<small>#0E9F8E</small></div>
+        <div class="chip" style="background:linear-gradient(135deg,#e07a12,#f59e0b)">Teacher<small>#E07A12</small></div>
+        <div class="chip" style="background:linear-gradient(135deg,#1f2a5a,#4f46e5)">Admin<small>#1F2A5A</small></div>
+      </div>
+      <div class="sw2">
+        <div class="chip" style="background:#10b981">Good<small>≥ 75%</small></div>
+        <div class="chip" style="background:#f59e0b">Watch<small>50–74%</small></div>
+        <div class="chip" style="background:#ef4444">At-risk<small>&lt; 50%</small></div>
+        <div class="chip" style="background:#0b1020">Ink<small>#0B1020</small></div>
+      </div>
+      <p class="bn" style="color:var(--muted);font-size:13px;margin:14px 0 0">প্রতিটি রোলের নিজস্ব রং — লগইন করলেই বোঝা যাবে কোন প্যানেলে আছেন।</p>
+    </div>
+
+    <!-- Typography -->
+    <div class="card c7 type">
+      <h3>Typography · Plus Jakarta Sans + Hind Siliguri</h3>
+      <div><span style="font-size:34px;font-weight:800;letter-spacing:-.03em">Dashboard Overview</span><small>Display · 34 / 800</small></div>
+      <div><span class="bn" style="font-size:28px;font-weight:700">আজকের উপস্থিতি ৯২%</span><small>বাংলা Heading · 28 / 700</small></div>
+      <div><span style="font-size:20px;font-weight:700;letter-spacing:-.01em">Model Test 05 — Merit List</span><small>Title · 20 / 700</small></div>
+      <div><span class="bn" style="font-size:15.5px;color:#334155">গণিতে আরও অনুশীলন দরকার — গত ৩টি পরীক্ষায় নম্বর কমছে।</span><small>Body · 15.5 / 400</small></div>
+      <div><span style="font-size:30px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums">78.4% · 142/150 · #3</span><small>Numbers · tabular</small></div>
+    </div>
+
+    <!-- Buttons & badges -->
+    <div class="card c4">
+      <h3>Buttons & Status</h3>
+      <div class="btns">
+        <button class="b p">Save attendance →</button>
+        <button class="b s">Export PDF</button>
+        <button class="b g">+ Add exam</button>
+        <button class="b d sm">Delete</button>
+        <button class="b s sm">Cancel</button>
+      </div>
+      <div class="badges">
+        <span class="bd" style="background:#ecfdf5;color:#047857"><i></i>Present</span>
+        <span class="bd" style="background:#fffbeb;color:#b45309"><i></i>Late</span>
+        <span class="bd" style="background:#fef2f2;color:#b91c1c"><i></i>Absent</span>
+        <span class="bd" style="background:#fef2f2;color:#b91c1c">⚠ At-risk</span>
+        <span class="bd" style="background:#ecfdf5;color:#047857">▲ Improving</span>
+        <span class="bd" style="background:#fffbeb;color:#b45309">⏳ Sync pending</span>
+        <span class="bd" style="background:#eef2ff;color:#4338ca">🏅 Top 3</span>
+      </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="card c4">
+      <h3>Inputs</h3>
+      <div class="inp">🔎 <span>Search student, roll, phone…</span></div>
+      <div class="inp f">👤 <span>Rahim Hossain</span></div>
+      <div class="inp e">📱 <span>0171234</span></div>
+      <div class="err bn">মোবাইল নম্বর ১১ সংখ্যার হতে হবে</div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="card c4">
+      <h3>Stat cards</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="stat">
+          <div class="lbl"><span class="bn">উপস্থিতি</span><span class="ico" style="background:#ecfdf5;color:#059669">✓</span></div>
+          <div class="val">92%</div><span class="delta" style="color:#059669">▲ 4% this month</span>
+        </div>
+        <div class="stat">
+          <div class="lbl"><span class="bn">গড় নম্বর</span><span class="ico" style="background:#efedff;color:#5b4cf0">★</span></div>
+          <div class="val">78.4</div><span class="delta" style="color:#059669">▲ 12% vs last</span>
+        </div>
+        <div class="stat">
+          <div class="lbl"><span class="bn">মেধাক্রম</span><span class="ico" style="background:#fff7ed;color:#ea580c">🏆</span></div>
+          <div class="val">#3<span style="font-size:15px;color:#94a3b8;font-weight:600">/42</span></div><span class="delta" style="color:#64748b">BCS-47 Morning</span>
+        </div>
+        <div class="stat">
+          <div class="lbl"><span class="bn">ঝুঁকিতে</span><span class="ico" style="background:#fef2f2;color:#dc2626">!</span></div>
+          <div class="val" style="color:#dc2626">14</div><span class="delta" style="color:#dc2626">needs follow-up</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data viz -->
+    <div class="card c5">
+      <h3>Progress · Charts</h3>
+      <div class="ring">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#f1f3f8" stroke-width="12"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="url(#rg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="236 302" transform="rotate(-90 60 60)"/>
+          <defs><linearGradient id="rg"><stop offset="0" stop-color="#5b4cf0"/><stop offset="1" stop-color="#14b8a6"/></linearGradient></defs>
+          <text x="60" y="58" text-anchor="middle" font-size="24" font-weight="800" fill="#0f172a" font-family="Plus Jakarta Sans">78%</text>
+          <text x="60" y="76" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Plus Jakarta Sans">overall</text>
+        </svg>
+        <svg width="320" height="120" viewBox="0 0 320 120">
+          <defs><linearGradient id="ag" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b4cf0" stop-opacity=".25"/><stop offset="1" stop-color="#5b4cf0" stop-opacity="0"/></linearGradient></defs>
+          <g stroke="#eef0f5"><line x1="0" x2="320" y1="20" y2="20"/><line x1="0" x2="320" y1="55" y2="55"/><line x1="0" x2="320" y1="90" y2="90"/></g>
+          <path d="M0 84 L64 76 L128 80 L192 56 L256 50 L320 26 L320 112 L0 112Z" fill="url(#ag)"/>
+          <path d="M0 84 L64 76 L128 80 L192 56 L256 50 L320 26" fill="none" stroke="#5b4cf0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M0 70 L64 68 L128 66 L192 64 L256 62 L320 60" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5 5"/>
+          <circle cx="320" cy="26" r="5" fill="#fff" stroke="#5b4cf0" stroke-width="3"/>
+        </svg>
+      </div>
+      <div class="subj">
+        <div><span class="bn">বাংলা</span><span class="bar"><span style="width:84%;background:#10b981"></span></span><b>84%</b></div>
+        <div><span>English</span><span class="bar"><span style="width:71%;background:#f59e0b"></span></span><b>71%</b></div>
+        <div><span class="bn">গণিত</span><span class="bar"><span style="width:42%;background:#ef4444"></span></span><b style="color:#dc2626">42%</b></div>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div class="card c7">
+      <h3>Student list row</h3>
+      <div class="student-row">
+        <div class="av" style="background:linear-gradient(135deg,#fbbf24,#f97316)">RH</div>
+        <div class="nm">Rahim Hossain<small>SC-2026-1001 · BCS-47 Morning</small></div>
+        <div class="end"><span class="bd" style="background:#ecfdf5;color:#047857">92% present</span><span class="bd" style="background:#ecfdf5;color:#047857">▲ 78%</span><button class="b s sm">View →</button></div>
+      </div>
+      <div class="student-row" style="background:#fffafa;border-color:#fde2e2">
+        <div class="av" style="background:linear-gradient(135deg,#f472b6,#ef4444)">JB</div>
+        <div class="nm">Jannat Begum<small>SC-2026-1008 · BCS-47 Morning</small></div>
+        <div class="end"><span class="bd" style="background:#fef2f2;color:#b91c1c">58% present</span><span class="bd" style="background:#fef2f2;color:#b91c1c">▼ 39%</span><span class="bd" style="background:#fef2f2;color:#b91c1c">⚠ 4 din absent</span><button class="b s sm">View →</button></div>
+      </div>
+      <div class="student-row">
+        <div class="av" style="background:linear-gradient(135deg,#60a5fa,#6366f1)">ST</div>
+        <div class="nm">Sumaiya Islam<small>SC-2026-1003 · BCS-47 Morning</small></div>
+        <div class="end"><span class="bd" style="background:#fffbeb;color:#b45309">81% present</span><span class="bd" style="background:#fffbeb;color:#b45309">– 64%</span><button class="b s sm">View →</button></div>
+      </div>
+    </div>
+
+    <!-- Roles -->
+    <div class="card c12">
+      <h3>Who sees what</h3>
+      <div class="roles">
+        <div class="rc" style="background:linear-gradient(135deg,#5b4cf0,#8b5cf6)"><b>🎓 Student</b><p class="bn">শুধু নিজের সবকিছু — উপস্থিতি, প্রতিটি পরীক্ষার নম্বর, মেধাক্রম, দুর্বল বিষয়, রুটিন, নোটিশ।</p></div>
+        <div class="rc" style="background:linear-gradient(135deg,#0e9f8e,#14b8a6)"><b>👨‍👩‍👦 Guardian</b><p class="bn">সন্তানের Student ID + PIN দিয়ে লগইন। সন্তানের সব তথ্য দেখবেন, কিছু পরিবর্তন করতে পারবেন না।</p></div>
+        <div class="rc" style="background:linear-gradient(135deg,#e07a12,#f59e0b)"><b>📚 Teacher</b><p class="bn">নিজের বিষয় (যেমন গণিত) — ওই বিষয়ের শিক্ষার্থীদের নম্বর, অগ্রগতি, উপস্থিতি নেওয়া, নম্বর দেওয়া।</p></div>
+        <div class="rc" style="background:linear-gradient(135deg,#1f2a5a,#4f46e5)"><b>🛡️ Admin</b><p class="bn">সবকিছু — সব ব্যাচ, সব শিক্ষক, সব শিক্ষার্থী, রিপোর্ট, সেটিংস।</p></div>
+      </div>
+    </div>
+
+    <div class="card c12">
+      <h3>Motion & feel</h3>
+      <div class="motion">
+        <div class="mo"><b>Smooth transitions</b>Page/tab change e 200ms fade + slide</div>
+        <div class="mo"><b>Skeleton loading</b>Data ashar shomoy shimmer card, faka screen na</div>
+        <div class="mo"><b>Number count-up</b>Dashboard e stat gulo 0 theke animate hoye bare</div>
+        <div class="mo"><b>Dark mode</b>Raat e chokh e aram — ek click e toggle</div>
+        <div class="mo"><b>Mobile-first</b>Bottom tab bar, boro touch button, one-hand use</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

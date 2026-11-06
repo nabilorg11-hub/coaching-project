@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8" />
+<title>Mobile Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; min-height: 100vh; font-family: "Plus Jakarta Sans", sans-serif; background: radial-gradient(1200px 600px at 50% 0%, #eef0ff, #f6f7fb 60%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
+  h1 { margin: 0; font-size: 20px; color: #0f172a; letter-spacing: -.02em; }
+  h1 span { color: #64748b; font-weight: 500; font-size: 14px; margin-left: 8px; }
+  .row { display: flex; gap: 48px; }
+  .phone { width: 390px; height: 800px; border-radius: 52px; padding: 12px; background: #0b1020; box-shadow: 0 40px 80px rgba(15,23,42,.25), inset 0 0 0 2px #2b3150; position: relative; }
+  .phone::after { content: ""; position: absolute; top: 22px; left: 50%; transform: translateX(-50%); width: 110px; height: 30px; border-radius: 20px; background: #0b1020; z-index: 2; }
+  iframe { width: 366px; height: 776px; border: 0; border-radius: 40px; background: #fff; display: block; }
+  .cap { text-align: center; margin-top: 14px; font-weight: 700; color: #334155; font-size: 14px; }
+</style>
+</head>
+<body>
+  <h1>Login — Mobile <span>366 × 776 viewport</span></h1>
+  <div class="row">
+    <div><div class="phone"><iframe src="login.html?role=student"></iframe></div><div class="cap">Student</div></div>
+    <div><div class="phone"><iframe src="login.html?role=guardian"></iframe></div><div class="cap">Guardian (সন্তানের ID দিয়ে)</div></div>
+    <div><div class="phone"><iframe src="login.html?role=admin"></iframe></div><div class="cap">Admin</div></div>
+  </div>
+</body>
+</html>

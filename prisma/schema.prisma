@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// role: ADMIN | TEACHER | STUDENT | GUARDIAN
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  phone        String   @unique
+  email        String?  @unique // admin login (optional)
+  passwordHash String
+  role         String
+  subjectId    String? // teacher's own subject
+  subject      Subject? @relation(fields: [subjectId], references: [id])
+  createdAt    DateTime @default(now())
+
+  student        Student?
+  notices        Notice[]
+  comments       Comment[]
+  guardianOf     Student[]           @relation("GuardianStudents")
+  teaches        BatchTeacher[]
+  attendanceTook AttendanceSession[]
+}
+
+model Course {
+  id      String  @id @default(cuid())
+  name    String  @unique // BCS, Bank, Primary
+  batches Batch[]
+}
+
+model Subject {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  examSubjects ExamSubject[]
+  teachers     User[]
+}
+
+model Batch {
+  id        String   @id @default(cuid())
+  name      String
+  shift     String // Morning / Evening
+  startDate DateTime
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  students   Student[]
+  teachers   BatchTeacher[]
+  attendance AttendanceSession[]
+  exams      Exam[]
+  notices    Notice[]
+}
+
+model BatchTeacher {
+  batchId   String
+  teacherId String
+  batch     Batch  @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  teacher   User   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@id([batchId, teacherId])
+}
+
+model Student {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rollNo         String   @unique // Student ID used for login, e.g. SC-2026-1001
+  batchId        String
+  batch          Batch    @relation(fields: [batchId], references: [id])
+  address        String?
+  targetExam     String?
+  status         String   @default("ACTIVE") // ACTIVE | INACTIVE
+  admissionDate  DateTime @default(now())
+  guardianId     String?
+  guardian       User?    @relation("GuardianStudents", fields: [guardianId], references: [id])
+  guardianRelation String?
+  guardianPinHash  String? // guardian logs in with Student ID + this PIN
+
+  attendance AttendanceRecord[]
+  marks      Mark[]
+  comments   Comment[]
+}
+
+model AttendanceSession {
+  id      String   @id @default(cuid())
+  batchId String
+  batch   Batch    @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  date    String // YYYY-MM-DD
+  takenById String
+  takenBy User     @relation(fields: [takenById], references: [id])
+  updatedAt DateTime @updatedAt
+  records AttendanceRecord[]
+
+  @@unique([batchId, date])
+}
+
+// status: PRESENT | ABSENT | LATE
+model AttendanceRecord {
+  id        String            @id @default(cuid())
+  sessionId String
+  session   AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  studentId String
+  student   Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  status    String
+
+  @@unique([sessionId, studentId])
+}
+
+// type: MODEL_TEST | WEEKLY | MCQ
+model Exam {
+  id       String        @id @default(cuid())
+  batchId  String
+  batch    Batch         @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  title    String
+  date     String // YYYY-MM-DD
+  type     String
+  subjects ExamSubject[]
+}
+
+model ExamSubject {
+  id        String  @id @default(cuid())
+  examId    String
+  exam      Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  fullMarks Float
+  marks     Mark[]
+
+  @@unique([examId, subjectId])
+}
+
+model Mark {
+  id            String      @id @default(cuid())
+  studentId     String
+  student       Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  examSubjectId String
+  examSubject   ExamSubject @relation(fields: [examSubjectId], references: [id], onDelete: Cascade)
+  obtained      Float
+
+  @@unique([studentId, examSubjectId])
+}
+
+// Offline sync idempotency + audit
+model SyncOp {
+  clientOpId String   @id
+  userId     String
+  kind       String
+  appliedAt  DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  detail    String
+  createdAt DateTime @default(now())
+}
+
+// Notice for everyone (batchId null) or one batch
+model Notice {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  icon      String   @default("📢")
+  batchId   String?
+  batch     Batch?   @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+// Teacher's remark about a student (visible to student & guardian)
+model Comment {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  text      String
+  createdAt DateTime @default(now())
+}

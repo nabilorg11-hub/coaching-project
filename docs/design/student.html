@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Student Dashboard — Shikhon Coaching</title>
+<link rel="stylesheet" href="dashboard-shell.css" />
+<script src="dashboard.js"></script>
+</head>
+<body data-role="student">
+<div class="app">
+  <!-- ========== Sidebar ========== -->
+  <aside class="side">
+    <div class="brand"><div class="mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></div><div>Shikhon Coaching<small>Student Portal</small></div></div>
+    <div class="side-label">Menu</div>
+    <a class="nav on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Dashboard</a>
+    <a class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>Result & Progress</a>
+    <a class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></svg>Attendance</a>
+    <a class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6a2 2 0 0 1 2 2v14l-5-3-5 3V6a2 2 0 0 1 2-2Z"/></svg>Exam Routine</a>
+    <a class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>Notice<span class="count">2</span></a>
+    <a class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14Z"/><path d="M8 7h8M8 11h6"/></svg>Study Material</a>
+    <div class="side-label">Account</div>
+    <a class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Amar Profile</a>
+    <div class="side-card">
+      <b class="bn">লক্ষ্য: BCS প্রিলি ৮৫%</b>
+      <p class="bn">আপনি এখন ৭৮.৪% — আর মাত্র ৬.৬% বাকি। চালিয়ে যান!</p>
+      <div class="bar" style="background:rgba(255,255,255,.12)"><span class="b-acc" style="width:92%"></span></div>
+    </div>
+    <div class="me"><div class="av g1">RH</div><div><b>Rahim Hossain</b><small>SC-2026-1001</small></div></div>
+  </aside>
+
+  <!-- ========== Main ========== -->
+  <main class="main">
+    <div class="topbar">
+      <div class="m-title"><div class="mark"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></div>Shikhon</div>
+      <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search exam, notice, subject…</span><kbd>Ctrl K</kbd></div>
+      <div class="top-r">
+        <span class="sync on-only"><i></i>Online · synced</span>
+        <span class="sync off off-only"><i></i>Offline · 10:42 AM</span>
+        <div class="pill-date hide-m"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Sat, 7 Nov 2026</div>
+        <div class="icon-btn hide-m"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></div>
+        <div class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="pip"></span></div>
+      </div>
+    </div>
+
+    <div class="offline-banner off-only">
+      <div class="ob-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M2 8.8a15 15 0 0 1 4.2-2.7M10.7 5.1A15 15 0 0 1 22 8.8M5 12.9a10 10 0 0 1 5.2-2.8M19 12.9a10 10 0 0 0-2-1.4M12 20h.01"/></svg></div>
+      <div><b>Internet nai — offline mode</b><span>শেষ আপডেট আজ ১০:৪২ AM। সব তথ্য দেখতে পারবেন, ইন্টারনেট এলে নতুন রেজাল্ট নিজেই চলে আসবে।</span></div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hi">Assalamu Alaikum 👋</div>
+      <h2>Rahim, আপনি দারুণ করছেন!</h2>
+      <div class="verdict">উপস্থিতি <b>৯২%</b>, গড় নম্বর <b>৭৮.৪%</b> — গত মাসের চেয়ে <b>১২% বেশি</b>। শুধু <b>গণিতে</b> একটু বেশি সময় দিন।</div>
+      <div class="chips">
+        <span class="chip">🎓 BCS-47 Morning</span>
+        <span class="chip">📅 আজ ক্লাস: গণিত · ৯:০০ AM</span>
+        <span class="chip">📝 মডেল টেস্ট ০৬ · ৩ দিন পর</span>
+      </div>
+      <div class="hero-r">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="60" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="13"/>
+          <circle cx="75" cy="75" r="60" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round" stroke-dasharray="295 377" transform="rotate(-90 75 75)"/>
+          <text x="75" y="74" text-anchor="middle" font-size="30" font-weight="800" fill="#fff" font-family="Plus Jakarta Sans">78%</text>
+          <text x="75" y="96" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.8)" font-family="Plus Jakarta Sans">overall score</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- KPIs -->
+    <div class="grid" style="margin-top:18px">
+      <div class="card kpi s3">
+        <div class="top"><span class="ic t-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></svg></span><span class="bn">উপস্থিতি</span></div>
+        <svg class="spark" width="84" height="34"><path d="M2 26 L16 22 L30 24 L44 15 L58 17 L72 9 L82 6" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div class="val num">92<small>%</small></div>
+        <div class="foot"><span class="up">▲ 4%</span><span class="bn">গত মাসের চেয়ে</span></div>
+      </div>
+      <div class="card kpi s3">
+        <div class="top"><span class="ic t-acc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3Z"/></svg></span><span class="bn">গড় নম্বর</span></div>
+        <svg class="spark" width="84" height="34"><path d="M2 28 L16 25 L30 26 L44 18 L58 19 L72 10 L82 5" fill="none" stroke="#5b4cf0" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div class="val num">78.4<small>%</small></div>
+        <div class="foot"><span class="up">▲ 12%</span><span class="bn">৫টি পরীক্ষায়</span></div>
+      </div>
+      <div class="card kpi s3">
+        <div class="top"><span class="ic t-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><span class="bn">মেধাক্রম</span></div>
+        <div class="val num">#3<small> / 42</small></div>
+        <div class="foot"><span class="up">▲ 2 ধাপ</span><span class="bn">ব্যাচে</span></div>
+      </div>
+      <div class="card kpi s3">
+        <div class="top"><span class="ic t-bad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></span><span class="bn">পরের পরীক্ষা</span></div>
+        <div class="val num">3<small> দিন</small></div>
+        <div class="foot"><span class="bn">মডেল টেস্ট ০৬ · মঙ্গলবার</span></div>
+      </div>
+
+      <!-- Progress chart -->
+      <div class="card s8">
+        <div class="card-h"><div><h3>Exam Progress</h3><p class="bn">প্রতিটি পরীক্ষায় আপনার নম্বর বনাম ব্যাচের গড়</p></div>
+          <div class="r hide-mobile"><div class="seg"><span>1M</span><span class="on">3M</span><span>All</span></div></div></div>
+        <svg viewBox="0 0 640 230" width="100%" height="230" preserveAspectRatio="none" style="overflow:visible">
+          <defs><linearGradient id="pa" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b4cf0" stop-opacity=".28"/><stop offset="1" stop-color="#5b4cf0" stop-opacity="0"/></linearGradient></defs>
+          <g stroke="var(--line)" stroke-dasharray="3 5"><line x1="36" x2="640" y1="20" y2="20"/><line x1="36" x2="640" y1="70" y2="70"/><line x1="36" x2="640" y1="120" y2="120"/><line x1="36" x2="640" y1="170" y2="170"/></g>
+          <g font-size="11" fill="var(--faint)" font-family="Plus Jakarta Sans"><text x="0" y="24">100</text><text x="6" y="74">75</text><text x="6" y="124">50</text><text x="6" y="174">25</text></g>
+          <path d="M60 128 L170 118 L280 112 L390 84 L500 74 L610 63 L610 200 L60 200Z" fill="url(#pa)"/>
+          <path d="M60 128 L170 118 L280 112 L390 84 L500 74 L610 63" fill="none" stroke="#5b4cf0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M60 116 L170 114 L280 116 L390 108 L500 106 L610 104" fill="none" stroke="var(--faint)" stroke-width="2" stroke-dasharray="6 6"/>
+          <g fill="var(--surface)" stroke="#5b4cf0" stroke-width="3"><circle cx="60" cy="128" r="5"/><circle cx="170" cy="118" r="5"/><circle cx="280" cy="112" r="5"/><circle cx="390" cy="84" r="5"/><circle cx="500" cy="74" r="5"/><circle cx="610" cy="63" r="6"/></g>
+          <g transform="translate(560 18)"><rect width="100" height="30" rx="9" fill="#0f172a"/><text x="50" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff" font-family="Plus Jakarta Sans">78.4% ▲ 5.2</text></g>
+          <g font-size="11.5" fill="var(--muted)" font-family="Plus Jakarta Sans" text-anchor="middle"><text x="60" y="222">Weekly 1</text><text x="170" y="222">Weekly 2</text><text x="280" y="222">Weekly 3</text><text x="390" y="222">Weekly 4</text><text x="500" y="222">Model 1</text><text x="610" y="222">Model 2</text></g>
+        </svg>
+        <div class="legend"><span><i style="background:#5b4cf0"></i>আমার নম্বর</span><span><i style="background:var(--faint)"></i>ব্যাচের গড়</span></div>
+      </div>
+
+      <!-- Subjects -->
+      <div class="card s4">
+        <div class="card-h"><div><h3>Subject Strength</h3><p class="bn">কোন বিষয়ে কেমন করছেন</p></div></div>
+        <div class="bar-row"><span class="bn">বাংলা</span><span class="bar"><span class="b-ok" style="width:86%"></span></span><b class="num">86%</b></div>
+        <div class="bar-row"><span>English</span><span class="bar"><span class="b-ok" style="width:81%"></span></span><b class="num">81%</b></div>
+        <div class="bar-row"><span class="bn">সাধারণ জ্ঞান</span><span class="bar"><span class="b-ok" style="width:79%"></span></span><b class="num">79%</b></div>
+        <div class="bar-row"><span>ICT</span><span class="bar"><span class="b-warn" style="width:68%"></span></span><b class="num">68%</b></div>
+        <div class="bar-row"><span class="bn">গণিত</span><span class="bar"><span class="b-bad" style="width:46%"></span></span><b class="num down">46%</b></div>
+        <div class="insight t-bad" style="margin-top:14px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg>
+          <div><b>Tip:</b> গণিতে শতকরা ও লাভ-ক্ষতি অধ্যায়ে বেশি ভুল হচ্ছে। প্রতিদিন ২০টি অনুশীলন করুন।</div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="card s7">
+        <div class="card-h"><div><h3>Recent Results</h3><p class="bn">সর্বশেষ পরীক্ষার ফলাফল</p></div><div class="r"><a class="btn btn-s btn-sm">সব দেখুন →</a></div></div>
+        <table class="tbl">
+          <thead><tr><th>Exam</th><th class="hide-mobile">Date</th><th>Marks</th><th>Rank</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><b>Model Test 02</b></td><td class="hide-mobile num">02 Nov</td><td class="num"><b>157</b>/200</td><td class="num">#3</td><td><span class="tag t-ok">▲ 78.5%</span></td></tr>
+            <tr><td><b>Model Test 01</b></td><td class="hide-mobile num">26 Oct</td><td class="num"><b>146</b>/200</td><td class="num">#5</td><td><span class="tag t-ok">▲ 73%</span></td></tr>
+            <tr><td><b>Weekly Test 04</b></td><td class="hide-mobile num">19 Oct</td><td class="num"><b>71</b>/100</td><td class="num">#6</td><td><span class="tag t-ok">▲ 71%</span></td></tr>
+            <tr><td><b>Weekly Test 03</b></td><td class="hide-mobile num">12 Oct</td><td class="num"><b>58</b>/100</td><td class="num">#11</td><td><span class="tag t-warn">– 58%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Attendance heatmap -->
+      <div class="card s5">
+        <div class="card-h"><div><h3>Attendance</h3><p class="bn">গত ৪ সপ্তাহ · ২৪ ক্লাসের ২২টিতে উপস্থিত</p></div><div class="r"><span class="tag t-ok"><i></i>92%</span></div></div>
+        <div class="heat">
+<div class="h">S</div><div class="h">M</div><div class="h">T</div><div class="h">W</div><div class="h">T</div><div class="h">F</div><div class="h">S</div>
+<div class="d d-p">11</div><div class="d d-p">12</div><div class="d d-p">13</div><div class="d d-l">14</div><div class="d d-p">15</div><div class="d d-o">16</div><div class="d d-p">17</div>
+<div class="d d-p">18</div><div class="d d-p">19</div><div class="d d-a">20</div><div class="d d-p">21</div><div class="d d-p">22</div><div class="d d-o">23</div><div class="d d-p">24</div>
+<div class="d d-p">25</div><div class="d d-p">26</div><div class="d d-p">27</div><div class="d d-p">28</div><div class="d d-p">29</div><div class="d d-o">30</div><div class="d d-p">31</div>
+<div class="d d-p">1</div><div class="d d-p">2</div><div class="d d-a">3</div><div class="d d-l">4</div><div class="d d-p">5</div><div class="d d-o">6</div><div class="d d-t">7</div>
+</div>
+        <div class="legend"><span><i style="background:#10b981"></i>Present</span><span><i style="background:#f59e0b"></i>Late</span><span><i style="background:#ef4444"></i>Absent</span><span><i style="background:var(--line-2)"></i>Off</span></div>
+      </div>
+
+      <!-- Upcoming -->
+      <div class="card s6">
+        <div class="card-h"><div><h3>Upcoming</h3><p class="bn">সামনের ক্লাস ও পরীক্ষা</p></div></div>
+        <div class="li"><div class="date-box"><b>07</b><small>Sat</small></div><div><div class="ttl bn">গণিত — শতকরা (২য় ক্লাস)</div><div class="sub">9:00 AM · Room 2 · Kamal Sir</div></div><span class="end tag t-acc">আজ</span></div>
+        <div class="li"><div class="date-box"><b>08</b><small>Sun</small></div><div><div class="ttl">English — Synonym & Antonym</div><div class="sub">9:00 AM · Room 1 · Rina Madam</div></div></div>
+        <div class="li"><div class="date-box" style="background:var(--bad-bg);color:var(--bad-tx)"><b>10</b><small>Tue</small></div><div><div class="ttl">Model Test 06 — Full syllabus</div><div class="sub">200 marks · 2 hours · Negative 0.5</div></div><span class="end tag t-bad">পরীক্ষা</span></div>
+      </div>
+
+      <!-- Notices -->
+      <div class="card s6">
+        <div class="card-h"><div><h3>Notice Board</h3><p class="bn">কোচিং থেকে নোটিশ</p></div><div class="r"><span class="tag t-bad">2 new</span></div></div>
+        <div class="li"><div class="av g5" style="border-radius:12px">📢</div><div><div class="ttl bn">শুক্রবার বিশেষ মডেল টেস্ট</div><div class="sub bn">সকাল ১০টা · সবাইকে উপস্থিত থাকতে হবে</div></div><span class="end sub">2h ago</span></div>
+        <div class="li"><div class="av g4" style="border-radius:12px">📚</div><div><div class="ttl bn">নতুন গণিত শিট আপলোড হয়েছে</div><div class="sub bn">Study Material থেকে ডাউনলোড করুন (offline-এও দেখা যাবে)</div></div><span class="end sub">1d ago</span></div>
+        <div class="li"><div class="av g2" style="border-radius:12px">🏆</div><div><div class="ttl bn">Model Test 02 মেধাতালিকা প্রকাশিত</div><div class="sub bn">আপনি ৩য় স্থানে আছেন — অভিনন্দন!</div></div><span class="end sub">5d ago</span></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <a class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Home</a>
+  <a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>Result</a>
+  <a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Attend</a>
+  <a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg>Notice</a>
+  <a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</a>
+</nav>
+</body>
+</html>
