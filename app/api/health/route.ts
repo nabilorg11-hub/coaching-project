@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { fixDbUrl } from "@/lib/db-url";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,27 @@ export async function GET() {
       : /does not exist|P2021/.test(msg) ? "tables missing — run npm run db:setup"
       : "error";
   }
+  // network probe to the database host (only host reachability, no credentials)
+  let network: string | undefined;
+  if (!database.startsWith("ok") && process.env.DATABASE_URL) {
+    try {
+      const host = /@([^:/@]+):(\d+)\//.exec(fixDbUrl(process.env.DATABASE_URL) ?? "");
+      if (host) {
+        const [{ lookup }, net] = await Promise.all([import("node:dns/promises"), import("node:net")]);
+        const addrs = await lookup(host[1], { all: true });
+        const t0 = Date.now();
+        const tcp = await new Promise<string>((res) => {
+          const sock = net.connect({ host: host[1], port: Number(host[2]), timeout: 8000 });
+          sock.on("connect", () => { sock.destroy(); res(`connected in ${Date.now() - t0}ms`); });
+          sock.on("timeout", () => { sock.destroy(); res("timeout"); });
+          sock.on("error", (err) => res(`error ${(err as NodeJS.ErrnoException).code}`));
+        });
+        network = `dns: ${addrs.map((a) => `IPv${a.family}`).join(",")} · tcp ${host[2]}: ${tcp} · region: ${process.env.VERCEL_REGION ?? "?"}`;
+      }
+    } catch (e) {
+      network = `probe failed: ${(e as NodeJS.ErrnoException).code ?? (e as Error).message}`;
+    }
+  }
   const ok = env.DATABASE_URL && database.startsWith("ok"); // SESSION_SECRET optional (falls back to the DB URL)
-  return NextResponse.json({ ok, env, database, detail }, { status: ok ? 200 : 500, headers: { "Cache-Control": "no-store" } });
+  return NextResponse.json({ ok, env, database, detail, network }, { status: ok ? 200 : 500, headers: { "Cache-Control": "no-store" } });
 }
